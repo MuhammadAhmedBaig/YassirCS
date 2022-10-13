@@ -25,20 +25,21 @@ class AppCoordinator: Coordinator {
         return MoviesListViewModel(useCase: makeGetMoviesListUseCase())
     }
     
-    private func makeGetMoviesListUseCase() -> GetMoviesUseCaseProtocol {
-        return GetMoviesUseCase(repo: makeMoviesRepository())
+    private func makeGetMoviesListUseCase() -> GetMoviesListUseCaseProtocol {
+        return GetMoviesListUseCase(repo: makeMoviesRepository())
     }
     
     private func makeMoviesRepository() -> MoviesListRepoProtocol {
         return MoviesRepository(moviesAPICalls: makeAPICallsRepo())
     }
     
-    private func makeAPICallsRepo() -> GetMoviesAPIProtocol {
+    private func makeAPICallsRepo() -> GetMoviesListAPIProtocol {
         return MoviesAPICalls()
     }
     
-    func showMovieDetails(with urlString: String) {
-        let coordinator = MovieDetailsCoordinator(navigationController: navigationController, dependencies: MovieDetailsCoordinator.Dependencies())
+    func showMovieDetails(withMovieId id: Int) {
+        let coordinator = MovieDetailsCoordinator(navigationController: navigationController,
+                                                  dependencies: MovieDetailsCoordinator.Dependencies(movieId: id))
         coordinator.start()
     }
 }

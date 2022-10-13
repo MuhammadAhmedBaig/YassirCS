@@ -16,6 +16,7 @@ enum Constants {
         }
         enum EndPoints: String {
             case discoverMovies = "discover/movie"
+            case details = "/movie/"
         }
     }
     
@@ -23,6 +24,7 @@ enum Constants {
         case baseURL = "https://image.tmdb.org/t/p/"
         enum AppendingURL: String {
             case originalSize = "original"
+            case thumbSize = "w300"
         }
     }
     
@@ -37,5 +39,6 @@ enum Constants {
     
     enum ScreenTitle: String {
         case homeTitle = "Trending Movies"
+        case detailsTitle = "Movie Details"
     }
 }

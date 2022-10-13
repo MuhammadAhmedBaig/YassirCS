@@ -1,6 +1,6 @@
 //
-//  NewsRepository.swift
-//  NyTimesArticles
+//  MoviesRepository.swift
+//  YassirCS
 //
 //  Created by Muhammad Ahmed Baig on 06/10/2022.
 //
@@ -11,15 +11,30 @@ protocol MoviesListRepoProtocol {
     func getMovies(completion: @escaping (Result<MoviesModel, YCSError>) -> Void)
 }
 
-class MoviesRepository: MoviesListRepoProtocol {
-    private var moviesAPIs: GetMoviesAPIProtocol
+protocol MoviesDetailsRepoProtocol {
+    func getDetailsMovies(withId id: Int,
+                          completion: @escaping (Result<MovieDetailsModel, YCSError>) -> Void)
+}
+
+
+class MoviesRepository: MoviesListRepoProtocol, MoviesDetailsRepoProtocol {
+    private var moviesAPIs: MoviesAPICallsProtocol
     
-    init(moviesAPICalls: GetMoviesAPIProtocol = MoviesAPICalls()) {
+    init(moviesAPICalls: GetMoviesListAPIProtocol) {
+        self.moviesAPIs = moviesAPICalls
+    }
+    
+    init(moviesAPICalls: GetMovieDetailsAPIProtocol) {
         self.moviesAPIs = moviesAPICalls
     }
     
     func getMovies(completion: @escaping (Result<MoviesModel, YCSError>) -> Void) {
-        self.moviesAPIs.getMovies(completion: completion)
+        (self.moviesAPIs as! GetMoviesListAPIProtocol).getMovies(completion: completion)
+    }
+    
+    func getDetailsMovies(withId id: Int,
+                          completion: @escaping (Result<MovieDetailsModel, YCSError>) -> Void) {
+        (self.moviesAPIs as! GetMovieDetailsAPIProtocol).getMovieDetails(withId: id, completion: completion)
     }
 }
 

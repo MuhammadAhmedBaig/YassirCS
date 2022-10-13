@@ -42,7 +42,7 @@ class MoviesListView: UIViewController {
     }
     
     private func fetchData() {
-        viewModel.getNewsFeeds()
+        viewModel.getMoviesList()
     }
     
     private func addViews() {
@@ -119,8 +119,8 @@ extension MoviesListView: MoviesListVMDelegate, Alertable {
         showAlert(message: msg)
     }
     
-    func moveToDetails(withURLString urlStr: String) {
-        coordinator?.showMovieDetails(with: urlStr)
+    func moveToDetails(withMovieId id: Int) {
+        coordinator?.showMovieDetails(withMovieId: id)
     }
 }
 

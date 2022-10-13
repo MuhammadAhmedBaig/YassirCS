@@ -13,26 +13,25 @@ struct MovieUIModel {
     var description: String
     var releaseDate: String
     var mediaURL: String
-    
 }
 
 protocol MoviesListVMDelegate: AnyObject {
     func sucessWhileFetchingData()
     func show(error msg: String)
-    func moveToDetails(withURLString urlStr: String)
+    func moveToDetails(withMovieId id: Int)
 }
 
 class MoviesListViewModel {
     
     weak var delegate: MoviesListVMDelegate?
-    private var useCase: GetMoviesUseCaseProtocol
+    private var useCase: GetMoviesListUseCaseProtocol
     private var uiModels = [MovieUIModel]()
     
-    init(useCase: GetMoviesUseCaseProtocol) {
+    init(useCase: GetMoviesListUseCaseProtocol) {
         self.useCase = useCase
     }
     
-    func getNewsFeeds() {
+    func getMoviesList() {
         self.useCase.execute { [weak self] result in
             guard let self = self else { return }
             
@@ -45,7 +44,7 @@ class MoviesListViewModel {
         }
     }
     
-    private func makeUIModels(moviesList: [Movie]) {
+    private func makeUIModels(moviesList: [MovieBreifModel]) {
         defer {
             self.delegate?.sucessWhileFetchingData()
         }
@@ -55,7 +54,7 @@ class MoviesListViewModel {
                                          title: movie.title,
                                          description: movie.description,
                                          releaseDate: movie.releaseDate,
-                                         mediaURL: movie.mediaURL))
+                                         mediaURL: movie.thumbImage))
         }
     }
     
@@ -68,6 +67,6 @@ class MoviesListViewModel {
     }
     
     func didTapOnItem(atIndex index: Int) {
-        self.delegate?.moveToDetails(withURLString: "")
+        self.delegate?.moveToDetails(withMovieId: uiModels[index].id)
     }
 }

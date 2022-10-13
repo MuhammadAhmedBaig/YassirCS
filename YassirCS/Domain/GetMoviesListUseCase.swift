@@ -1,5 +1,5 @@
 //
-//  GetMoviesUseCase.swift
+//  GetMoviesListUseCase.swift
 //  YassirCS
 //
 //  Created by Muhammad Ahmed Baig on 06/10/2022.
@@ -7,18 +7,18 @@
 
 import Foundation
 
-protocol GetMoviesUseCaseProtocol {
-    func execute(completion: @escaping (Result<[Movie], YCSError>) -> Void)
+protocol GetMoviesListUseCaseProtocol {
+    func execute(completion: @escaping (Result<[MovieBreifModel], YCSError>) -> Void)
 }
 
-class GetMoviesUseCase: GetMoviesUseCaseProtocol {
+class GetMoviesListUseCase: GetMoviesListUseCaseProtocol {
     private let repo: MoviesListRepoProtocol
     
-    init(repo: MoviesListRepoProtocol = MoviesRepository()) {
+    init(repo: MoviesListRepoProtocol) {
         self.repo = repo
     }
     
-    func execute(completion: @escaping (Result<[Movie], YCSError>) -> Void) {
+    func execute(completion: @escaping (Result<[MovieBreifModel], YCSError>) -> Void) {
         self.repo.getMovies { (result) in
             switch result {
             case .success(let model):

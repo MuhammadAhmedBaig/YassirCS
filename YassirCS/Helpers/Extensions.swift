@@ -10,7 +10,6 @@ import UIKit
 
 struct ImageCache {
     private static let defaults = UserDefaults.standard
-//    private static let cache = NSCache<String, UIImage>()
     static func saveImage(withURL url: URL, andData data: Data) {
         deleteCache(forURL: url)
         defaults.set(data, forKey: url.absoluteString)
@@ -61,7 +60,6 @@ extension UIImageView {
     }
     
 }
-
 
 extension UIImage {
     static let placeholder = UIImage(named: "placeholder")

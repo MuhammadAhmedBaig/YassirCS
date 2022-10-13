@@ -32,7 +32,7 @@ class MovieDetailsView: UIViewController {
     var titleLbl: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.text = "Orphan: First Kill"
+        lbl.text = "---"
         lbl.numberOfLines = 3
         lbl.font = UIFont.boldSystemFont(ofSize: 18.0)
         lbl.textColor = .black
@@ -52,22 +52,24 @@ class MovieDetailsView: UIViewController {
     var descriptionLbl: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.text = "After escaping from an Estonian psychiatric facility, Leena Klammer travels to America by impersonating Esther, the missing daughter of a wealthy family. But when her mask starts to slip, she is put against a mother who will protect her family from the murderous “child” at any cost.After escaping from an Estonian psychiatric facility, Leena Klammer travels to America by impersonating Esther, the missing daughter of a wealthy family. But when her mask starts to slip, she is put against a mother who will protect her family from the murderous “child” at any cost.After escaping from an Estonian psychiatric facility, Leena Klammer travels to America by impersonating Esther, the missing daughter of a wealthy family. But when her mask starts to slip, she is put against a mother who will protect her family from the murderous “child” at any cost.After escaping from an Estonian psychiatric facility, Leena Klammer travels to America by impersonating Esther, the missing daughter of a wealthy family. But when her mask starts to slip, she is put against a mother who will protect her family from the murderous “child” at any cost."
+        lbl.text = "------------\n---------"
         lbl.numberOfLines = 0
         lbl.font = UIFont.systemFont(ofSize: 16.0)
         lbl.textColor = .black
         return lbl
     }()
     
-    init() {
-//        self.viewModel = viewModel
+    var viewModel: MovieDetailsViewModel
+    init(viewModel: MovieDetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-//        self.viewModel.delegate = self
+        self.viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -75,11 +77,17 @@ class MovieDetailsView: UIViewController {
         self.setupNavTitle()
         self.addViews()
         self.setupConstriants()
+        
+        self.fetchData()
+    }
+    
+    private func fetchData() {
+        viewModel.getDetails()
     }
     
     private func setupNavTitle() {
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        title = Constants.ScreenTitle.homeTitle.rawValue
+        title = Constants.ScreenTitle.detailsTitle.rawValue
     }
     
     // MARK: - Add Views and Setup Constraints
@@ -101,8 +109,6 @@ class MovieDetailsView: UIViewController {
         self.setupConstraintsForTitleLbl()
         self.setupConstraintsForDateOfReleaseLbl()
         self.setupConstraintsForDescriptionLbl()
-        
-        self.imageView.setImage(from: "https://image.tmdb.org/t/p/original/AeyiuQUUs78bPkz18FY3AzNFF8b.jpg")
     }
     
     private func setupConstraintsForScrollView() {
@@ -149,4 +155,20 @@ class MovieDetailsView: UIViewController {
         self.descriptionLbl.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -16).isActive = true
     }
     
+}
+
+extension MovieDetailsView: MovieDetailsVMDelegate, Alertable {
+    func successWhileFetching(movieDetails uiModel: MovieDetailsUIModel) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.titleLbl.text = uiModel.title
+            self.descriptionLbl.text = uiModel.description
+            self.dateOfReleaseLbl.text = uiModel.releaseDate
+            self.imageView.setImage(from: uiModel.mediaURL)
+        }
+    }
+    
+    func show(error msg: String) {
+        self.showAlert(message: msg)
+    }
 }

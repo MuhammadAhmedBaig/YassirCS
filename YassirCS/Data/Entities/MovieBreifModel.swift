@@ -1,23 +1,27 @@
 //
-//  NewsModel.swift
-//  NyTimesArticles
+//  MovieBreifModel.swift
+//  YassirCS
 //
 //  Created by Muhammad Ahmed Baig on 06/10/2022.
 //
 
 import Foundation
 
-struct MoviesModel: Decodable {
-    var results: [Movie]
+enum MediaType {
+    case thumb
+    case poster
 }
 
-struct Movie: Decodable {
+struct MoviesModel: Decodable {
+    var results: [MovieBreifModel]
+}
+
+struct MovieBreifModel: Decodable {
     var id: Int
     var title: String
     var description: String
     var releaseDate: String
-    private var path: String
-    var mediaURL: String = ""
+    var thumbImage: String = ""
     
     enum CodingKeys: String, CodingKey {
         case id, title
@@ -33,12 +37,20 @@ struct Movie: Decodable {
         self.title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
         self.description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
         self.releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate) ?? ""
-        
-        self.path = try container.decodeIfPresent(String.self, forKey: .posterPath) ?? ""
-        self.mediaURL = self.makeMediaURL(fromPosterPath: self.path)
+        let path = try container.decodeIfPresent(String.self, forKey: .posterPath) ?? ""
+        self.thumbImage = "\(Constants.Media.baseURL.rawValue)\(Constants.Media.AppendingURL.thumbSize.rawValue)\(path)"
     }
     
-    private func makeMediaURL(fromPosterPath path: String) -> String {
-        return "\(Constants.Media.baseURL.rawValue)\(Constants.Media.AppendingURL.originalSize.rawValue)\(path)"
+    init(id: Int,
+         title: String,
+         description: String,
+         releaseDate: String,
+         thumbImage: String = "") {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.releaseDate = releaseDate
+        self.thumbImage = thumbImage
     }
+    
 }

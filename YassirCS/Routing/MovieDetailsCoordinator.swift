@@ -13,7 +13,7 @@ class MovieDetailsCoordinator: Coordinator {
     var dependencies: Dependencies
     
     struct Dependencies {
-//        var urlString: String
+        var movieId: Int
     }
 
     init(navigationController: UINavigationController,
@@ -23,14 +23,26 @@ class MovieDetailsCoordinator: Coordinator {
     }
 
     func start() {
-        let vc: MovieDetailsView = MovieDetailsView()
+        let vc: MovieDetailsView = MovieDetailsView(viewModel: self.makeMovieDetailsViewModel())
         DispatchQueue.main.async {
             self.navigationController.pushViewController(vc, animated: true)
         }
     }
     
-//    private func makeNewsDetailViewModel() -> NewsDetailViewModel {
-//        return NewsDetailViewModel(urlString: self.dependencies.urlString)
-//    }
+    private func makeMovieDetailsViewModel() -> MovieDetailsViewModel {
+        return MovieDetailsViewModel(useCase: makeGetMovieDetailsUseCase(),
+                                     movieId: dependencies.movieId)
+    }
     
+    private func makeGetMovieDetailsUseCase() -> GetMovieDetailsUseCaseProtocol {
+        return GetMovieDetailsUseCase(repo: makeMoviesRepository())
+    }
+    
+    private func makeMoviesRepository() -> MoviesDetailsRepoProtocol {
+        return MoviesRepository(moviesAPICalls: makeAPICallsRepo())
+    }
+    
+    private func makeAPICallsRepo() -> GetMovieDetailsAPIProtocol {
+        return MoviesAPICalls()
+    }
 }
