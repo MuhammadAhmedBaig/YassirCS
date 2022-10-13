@@ -102,7 +102,7 @@ class MovieDetailsView: UIViewController {
         self.setupConstraintsForDateOfReleaseLbl()
         self.setupConstraintsForDescriptionLbl()
         
-        self.imageView.setImage(from: "https://image.tmdb.org/t/p/original/AeyiuQUUs78bPkz18FY3AzNFF8b.jpg", forID: 123)
+        self.imageView.setImage(from: "https://image.tmdb.org/t/p/original/AeyiuQUUs78bPkz18FY3AzNFF8b.jpg")
     }
     
     private func setupConstraintsForScrollView() {
