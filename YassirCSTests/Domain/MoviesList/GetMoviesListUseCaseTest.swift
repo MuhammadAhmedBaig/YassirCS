@@ -14,9 +14,9 @@ class GetMoviesListUseCaseTest: XCTestCase {
         let useCase = GetMoviesListUseCase(repo: repository)
         useCase.execute { result in
             switch result {
-            case .success(let newsList):
-                XCTAssert(newsList.count == 3)
-                XCTAssert(newsList.first?.title == "Harry Potter 1")
+            case .success(let moviesList):
+                XCTAssert(moviesList.count == 3)
+                XCTAssert(moviesList.first?.title == "Harry Potter 1")
             case .failure(_):
                 break
             }
